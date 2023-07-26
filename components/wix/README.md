@@ -1,1 +1,0 @@
-# WiX components
