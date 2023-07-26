@@ -268,6 +268,7 @@ export class GEMS {
                     this.animationTimer = window.requestAnimationFrame(runAnimation);
                 }
             };
+            runAnimation();
         }
     }
 
