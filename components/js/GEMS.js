@@ -25,8 +25,7 @@ const _root = "http://ec2-52-8-59-36.us-west-1.compute.amazonaws.com:5001/api/";
 let _apiKey = null;
 let _appId = null;  // string, set by init
 let _userId = null; // string, set by initUser
-// to be replaced by AWS returning full URL:
-let _imageRoot = "https://d2c8cl134xhhwp.cloudfront.net/";
+
 let _count = 5; // debug / local testing
 
 
@@ -117,7 +116,7 @@ var GEMS = (function () {
                     result = {
                         achievements: [{
                             title: "You won!",
-                            image: "trophy.png",
+                            image: "https://d2c8cl134xhhwp.cloudfront.net/trophy.png",
                             description: "Have a trophy!",
                         }],
                     }
