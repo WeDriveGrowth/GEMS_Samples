@@ -132,7 +132,7 @@ export class GEMS {
     static async event(name: string, data: any = {}, options: {
         displayAll?: boolean,
         displayFirst?: boolean,
-    } = {}) {
+    } = {displayFirst: true}) {
         let result;
         try {
             if (LOCALTEST) {
@@ -218,8 +218,6 @@ export class GEMS {
         // cleanup
         scrim.remove();
     };
-
-    
 
     private static _colors: string[] = ["DodgerBlue", "OliveDrab", "Gold", "Pink", "SlateBlue", "LightBlue", "Violet", "PaleGreen", "SteelBlue", "SandyBrown", "Chocolate", "Crimson"]
     private static streamingConfetti: boolean = false;
