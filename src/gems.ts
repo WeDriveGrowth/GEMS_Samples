@@ -348,7 +348,7 @@ function _createStyle() {
     if (typeof window === "undefined") {
         return;
     }
-    LOCALTEST = location.origin === "file://";
+    LOCALTEST = (location.origin === "file://" || location.origin.startsWith("http://localhost:"));
     const style = document.createElement("style");
     const css = `
     .GEMS-scrim {
