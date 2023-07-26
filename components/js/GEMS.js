@@ -7,7 +7,7 @@
 // credits:
 // confetti by mathusummut, MIT license: https://www.cssscript.com/confetti-falling-animation/
 
-const LOCALTEST=true;
+const LOCALTEST=location.origin==="file://";
 
 // confetti state
 var maxParticleCount = 150; //set max confetti count
