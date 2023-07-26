@@ -1,3 +1,3 @@
-import { GEMS } from './gems'
+import { GEMS, GEMSInitParams, GEMSAchievement, GEMSState } from './gems'
 
-export { GEMS }
+export { GEMS, GEMSInitParams, GEMSAchievement, GEMSState }
