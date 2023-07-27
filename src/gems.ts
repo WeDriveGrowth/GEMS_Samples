@@ -390,7 +390,7 @@ function _createStyle() {
     document.head.appendChild(style);
 }
 
-if (typeof window === "undefined") {
+if (typeof window !== "undefined") {
     _createStyle();
     (window as any)["GEMS"] = GEMS;
 }
