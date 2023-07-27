@@ -301,12 +301,17 @@ export class GEMS {
     }
 
     // alternate fetch for node 16
-    private static fetch(url: string, init: RequestInit): Promise<Response> {
-        console.log("fetch: "+init.method+": "+url);
-        console.log("    headers: "+JSON.stringify(init.headers));
-        console.log("    body   : "+JSON.stringify(init.body));
+    private static async fetch(url: string, init: RequestInit): Promise<Response> {
+        console.log("fetch: " + init.method + ": " + url);
+        console.log("    headers: " + JSON.stringify(init.headers));
+        console.log("    body   : " + JSON.stringify(init.body));
         if (typeof window !== "undefined") {
-            return fetch(url, init);
+            try {
+                const response = await fetch(url, init);
+                console.log("fetch: response: " + JSON.stringify(response));
+            } catch (error) {
+                console.log("fetch: error response: " + error);
+            }
         }
 
         const p: Promise<Response> = new Promise((resolve, reject) => {
@@ -330,7 +335,7 @@ export class GEMS {
             // resolve/reject
             xhr.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
-                    console.log("fetch: response: "+JSON.stringify(this.response));
+                    console.log("fetch: response: " + JSON.stringify(this.response));
                     resolve(this.response);
                 } else if (this.readyState == 4 && this.status !== 200) {
                     console.log("fetch: error response");
