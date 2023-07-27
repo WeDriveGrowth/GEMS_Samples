@@ -7,7 +7,7 @@
 // credits:
 // confetti by mathusummut, MIT license: https://www.cssscript.com/confetti-falling-animation/
 
-import { default as fetchNode } from "node-fetch";
+// import { default as fetchNode } from "node-fetch";
 
 //
 // global state
@@ -314,7 +314,7 @@ export class GEMS {
             if (typeof window !== "undefined") {
                 response = fetch(url, init);
             } else {
-                response = fetchNode(url, init as any);
+                // response = fetchNode(url, init as any);
             }
         } catch (error) {
             console.log("fetch: error response: " + error);
