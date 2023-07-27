@@ -43,7 +43,7 @@ class Particle {
 };
 
 export class GEMS {
-    private static _root = "https://bayz.ai/api/";
+    private static _root = "https://gemsapi.bayz.ai/api/";
     private static state: GEMSState = {};
     //
     // helpers
