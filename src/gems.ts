@@ -132,7 +132,7 @@ export class GEMS {
     static async event(name: string, data: any = {}, options: {
         displayAll?: boolean,
         displayFirst?: boolean,
-    } = {displayFirst: true}) {
+    } = { displayFirst: true }) {
         let result;
         try {
             if (LOCALTEST) {
@@ -165,13 +165,15 @@ export class GEMS {
                 result = await response.json();
             }
 
-            if (options.displayAll) {
-                for (let a of result.achievements) {
-                    await this.displayAchievement(a);
-                }
-            } else if (options.displayFirst) {
-                if (result.achievements && result.achievements.length > 0) {
-                    await this.displayAchievement(result.achievements[0]);
+            if (typeof window !== "undefined") {
+                if (options.displayAll) {
+                    for (let a of result.achievements) {
+                        await this.displayAchievement(a);
+                    }
+                } else if (options.displayFirst) {
+                    if (result.achievements && result.achievements.length > 0) {
+                        await this.displayAchievement(result.achievements[0]);
+                    }
                 }
             }
             return result;
@@ -228,7 +230,7 @@ export class GEMS {
     private static maxParticleCount = 150; //set max confetti count
     private static particleSpeed = 2; //set the particle animation speed
 
-    private static resetParticle(particle: Particle, width: number, height: number):Particle {
+    private static resetParticle(particle: Particle, width: number, height: number): Particle {
         particle.color = this._colors[(Math.random() * this._colors.length) | 0];
         particle.x = Math.random() * width;
         particle.y = Math.random() * height - height;
@@ -276,7 +278,7 @@ export class GEMS {
         this.streamingConfetti = false;
     }
 
-    private static drawParticles(context:CanvasRenderingContext2D) {
+    private static drawParticles(context: CanvasRenderingContext2D) {
         let particle;
         let x;
         for (var i = 0; i < this.particles.length; i++) {
@@ -341,10 +343,9 @@ export class GEMS {
     }
 }
 
-let LOCALTEST:boolean;
+let LOCALTEST: boolean;
 
 function _createStyle() {
-    LOCALTEST = (location.origin === "file://" || location.origin.startsWith("http://localhost:"));
     const style = document.createElement("style");
     const css = `
     .GEMS-scrim {
@@ -391,6 +392,8 @@ function _createStyle() {
 }
 
 if (typeof window !== "undefined") {
+    // in browser
+    LOCALTEST = (location.origin === "file://" || location.origin.startsWith("http://localhost:"));
     _createStyle();
     (window as any)["GEMS"] = GEMS;
 }
