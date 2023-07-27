@@ -132,6 +132,16 @@ export class GEMS {
         displayFirst?: boolean,
     } = { displayFirst: true }) {
         let result;
+        const body: any = {
+            user_id: this.state.userId,
+            tagName: name,
+            localTime: this._getLocalTime(),
+            data: data,
+        };
+        if (Object.keys(data).length === 1 && ("value" in data)) {
+            delete body["data"];
+            body["value"] = data.value;
+        }
         try {
             const response = await this.fetch(this._root + "tag/" + this.state.appId, {
                 method: "POST",
@@ -140,12 +150,7 @@ export class GEMS {
                     "Content-Type": "text/plain",
                 },
                 // sending body as plain text due to AWS CORS policy
-                body: JSON.stringify({
-                    user_id: this.state.userId,
-                    tagName: name,
-                    localTime: this._getLocalTime(),
-                    data: data,
-                }),
+                body: JSON.stringify(body),
             });
             result = await response.json();
             console.log("fetch: result: " + JSON.stringify(result));
