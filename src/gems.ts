@@ -309,7 +309,7 @@ export class GEMS {
             let response;
             try {
                 response = await fetch(url, init);
-                console.log("fetch: response: " + JSON.stringify(response));
+                console.log("fetch: response: " + JSON.stringify(await response.json()));
             } catch (error) {
                 console.log("fetch: error response: " + error);
                 throw error;
