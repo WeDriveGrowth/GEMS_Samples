@@ -83,39 +83,32 @@ export class GEMS {
         delete this.state.apiKey;
 
         try {
-            if (LOCALTEST) {
-                return {
-                    userId: "myid",
-                    token: "my token"
-                };
-            } else {
-                if (!params.userId && params.useCookie) {
-                    this.state.userId = this._getCookie("gems-user-id");
-                }
-
-                let url = this._root + "user/" +
-                    params.appId +
-                    (params.userId ? "/" + params.userId : "");
-
-                const response = await fetch(url, {
-                    method: "POST",
-                    headers: {
-                        apikey: params.apiKey,
-                    },
-                });
-                const result = await response.json();
-                this.state.userId = result.user_id;
-                this.state.token = result.token;
-
-                if (params.useCookie) {
-                    this._setCookie("gems-user-id", this.state.userId!, 365);
-                }
-
-                return {
-                    userId: this.state.userId,
-                    token: this.state.token,
-                };
+            if (!params.userId && params.useCookie) {
+                this.state.userId = this._getCookie("gems-user-id");
             }
+
+            let url = this._root + "user/" +
+                params.appId +
+                (params.userId ? "/" + params.userId : "");
+
+            const response = await this.fetch(url, {
+                method: "POST",
+                headers: {
+                    apikey: params.apiKey,
+                },
+            });
+            const result = await response.json();
+            this.state.userId = result.user_id;
+            this.state.token = result.token;
+
+            if (params.useCookie) {
+                this._setCookie("gems-user-id", this.state.userId!, 365);
+            }
+
+            return {
+                userId: this.state.userId,
+                token: this.state.token,
+            };
         } catch (error) {
             console.error("GEMS API error:")
             console.error(error);
@@ -135,35 +128,21 @@ export class GEMS {
     } = { displayFirst: true }) {
         let result;
         try {
-            if (LOCALTEST) {
-                if (data.value > 50) {
-                    result = {
-                        achievements: [{
-                            title: "You scored more than 50 points!",
-                            image: "https://d2c8cl134xhhwp.cloudfront.net/trophy.png",
-                            description: "Have a trophy!",
-                        }],
-                    }
-                } else {
-                    return {};
-                }
-            } else {
-                const response = await fetch(this._root + "tag/" + this.state.appId, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer " + this.state.token,
-                        "Accept": "application/json",
-                    },
-                    body: {
-                        user_id: this.state.userId,
-                        tagName: name,
-                        localTime: this._getLocalTime(),
-                        data: data,
-                    } as any,
-                });
-                result = await response.json();
-            }
+            const response = await this.fetch(this._root + "tag/" + this.state.appId, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + this.state.token,
+                    "Accept": "application/json",
+                },
+                body: {
+                    user_id: this.state.userId,
+                    tagName: name,
+                    localTime: this._getLocalTime(),
+                    data: data,
+                } as any,
+            });
+            result = await response.json();
 
             if (typeof window !== "undefined") {
                 if (options.displayAll) {
@@ -319,6 +298,46 @@ export class GEMS {
         }
     }
 
+    // alternate fetch for node 16
+    private static fetch(url: string, init: RequestInit): Promise<Response> {
+        if (typeof window !== "undefined") {
+            return fetch(url, init);
+        }
+
+        const p: Promise<Response> = new Promise((resolve, reject) => {
+
+            const xhr = new XMLHttpRequest();
+            let method = init.method ?? "GET";
+
+            // process headers
+            for (const headerKey in init.headers) {
+                const headerValue = (init as any).headers[headerKey];
+                xhr.setRequestHeader(headerKey, headerValue);
+            }
+
+            // process body
+            const formData = new FormData();
+            for (const itemKey in init.body as any) {
+                const item = (init.body as any)[itemKey];
+                formData.append(itemKey, item);
+            }
+
+            // resolve/reject
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    resolve(this.response);
+                } else if (this.readyState == 4 && this.status !== 200) {
+                    reject(this);
+                }
+            };
+
+            // send it, async
+            xhr.open(method, url, true);
+            xhr.send(formData);
+        });
+        return p;
+    }
+
     // cookies
     private static _setCookie(cname: string, cvalue: string, exdays: number) {
         const d = new Date();
@@ -342,8 +361,6 @@ export class GEMS {
         return "";
     }
 }
-
-let LOCALTEST: boolean;
 
 function _createStyle() {
     const style = document.createElement("style");
@@ -393,7 +410,6 @@ function _createStyle() {
 
 if (typeof window !== "undefined") {
     // in browser
-    LOCALTEST = (location.origin === "file://" || location.origin.startsWith("http://localhost:"));
     _createStyle();
     (window as any)["GEMS"] = GEMS;
 }
