@@ -1,6 +1,6 @@
 {
-  "name": "bayz-gems-api",
-  "version": "0.1.26",
+  "name": "bayze-gems-api",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -28,10 +28,10 @@
     "dist"
   ],
   "keywords": [
-    "Bayz",
+    "Bayze",
     "GEMS"
   ],
-  "author": "Bayz.ai",
+  "author": "Bayze.com",
   "license": "ISC",
   "homepage": "https://github.com/WeDriveGrowth/GEMS_Samples",
   "repository": {

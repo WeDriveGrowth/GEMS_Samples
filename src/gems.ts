@@ -137,6 +137,7 @@ export class GEMS {
                 method: "POST",
                 headers: {
                     "Authorization": "Bearer " + this.state.token,
+                    "Content-Type": "text/plain",
                 },
                 // sending body as plain text due to AWS CORS policy
                 body: JSON.stringify({
