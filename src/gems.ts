@@ -7,8 +7,6 @@
 // credits:
 // confetti by mathusummut, MIT license: https://www.cssscript.com/confetti-falling-animation/
 
-// import { default as fetchNode } from "node-fetch";
-
 //
 // global state
 //
@@ -18,6 +16,7 @@ export interface GEMSInitParams {
     appId: string;
     userId?: string;
     useCookie?: boolean;
+    fetch?: (url:any, init:any)=>Promise<any>;
 }
 
 export interface GEMSAchievement {
@@ -32,6 +31,7 @@ export interface GEMSState {
     appId?: string;
     userId?: string;
     token?: string;
+    fetch?: (url:any, init:any)=>Promise<any>;
 };
 
 class Particle {
@@ -136,16 +136,15 @@ export class GEMS {
             const response = await this.fetch(this._root + "tag/" + this.state.appId, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
                     "Authorization": "Bearer " + this.state.token,
-                    "Accept": "application/json",
                 },
-                body: {
+                // sending body as plain text due to AWS CORS policy
+                body: JSON.stringify({
                     user_id: this.state.userId,
                     tagName: name,
                     localTime: this._getLocalTime(),
                     data: data,
-                } as any,
+                }),
             });
             result = await response.json();
             console.log("fetch: result: " + JSON.stringify(result));
@@ -314,7 +313,7 @@ export class GEMS {
             if (typeof window !== "undefined") {
                 response = fetch(url, init);
             } else {
-                // response = fetchNode(url, init as any);
+                response = this.state.fetch!(url, init as any);
             }
         } catch (error) {
             console.log("fetch: error response: " + error);
