@@ -300,6 +300,7 @@ export class GEMS {
 
     // alternate fetch for node 16
     private static fetch(url: string, init: RequestInit): Promise<Response> {
+        console.log("fetch: "+init.method+": "+url+", "+JSON.stringify(init.body));
         if (typeof window !== "undefined") {
             return fetch(url, init);
         }
