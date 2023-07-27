@@ -100,6 +100,7 @@ export class GEMS {
                 },
             });
             const result = await response.json();
+            console.log("fetch: result: " + JSON.stringify(result));
             this.state.userId = result.user_id;
             this.state.token = result.token;
 
@@ -145,6 +146,7 @@ export class GEMS {
                 } as any,
             });
             result = await response.json();
+            console.log("fetch: result: " + JSON.stringify(result));
 
             if (typeof window !== "undefined") {
                 if (options.displayAll) {
@@ -309,7 +311,6 @@ export class GEMS {
             let response;
             try {
                 response = await fetch(url, init);
-                console.log("fetch: response: " + JSON.stringify(await response.json()));
             } catch (error) {
                 console.log("fetch: error response: " + error);
                 throw error;
