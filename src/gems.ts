@@ -306,12 +306,15 @@ export class GEMS {
         console.log("    headers: " + JSON.stringify(init.headers));
         console.log("    body   : " + JSON.stringify(init.body));
         if (typeof window !== "undefined") {
+            let response;
             try {
-                const response = await fetch(url, init);
+                response = await fetch(url, init);
                 console.log("fetch: response: " + JSON.stringify(response));
             } catch (error) {
                 console.log("fetch: error response: " + error);
+                throw error;
             }
+            return response;
         }
 
         const p: Promise<Response> = new Promise((resolve, reject) => {
