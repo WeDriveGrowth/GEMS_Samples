@@ -344,9 +344,6 @@ export class GEMS {
 let LOCALTEST:boolean;
 
 function _createStyle() {
-    if (typeof window === "undefined") {
-        return;
-    }
     LOCALTEST = (location.origin === "file://" || location.origin.startsWith("http://localhost:"));
     const style = document.createElement("style");
     const css = `
@@ -393,4 +390,8 @@ function _createStyle() {
     document.head.appendChild(style);
 }
 
-_createStyle();
+if (typeof window === "undefined") {
+    _createStyle();
+    (window as any)["GEMS"] = GEMS;
+}
+
