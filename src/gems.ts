@@ -7,6 +7,8 @@
 // credits:
 // confetti by mathusummut, MIT license: https://www.cssscript.com/confetti-falling-animation/
 
+import { default as fetchNode } from "node-fetch";
+
 //
 // global state
 //
@@ -302,57 +304,23 @@ export class GEMS {
         }
     }
 
-    // alternate fetch for node 16
+    // alternate fetch for node <18
     private static async fetch(url: string, init: RequestInit): Promise<Response> {
         console.log("fetch: " + init.method + ": " + url);
         console.log("    headers: " + JSON.stringify(init.headers));
         console.log("    body   : " + JSON.stringify(init.body));
-        if (typeof window !== "undefined") {
-            let response;
-            try {
-                response = await fetch(url, init);
-            } catch (error) {
-                console.log("fetch: error response: " + error);
-                throw error;
+        let response;
+        try {
+            if (typeof window !== "undefined") {
+                response = fetch(url, init);
+            } else {
+                response = fetchNode(url, init as any);
             }
-            return response;
+        } catch (error) {
+            console.log("fetch: error response: " + error);
+            throw error;
         }
-
-        const p: Promise<Response> = new Promise((resolve, reject) => {
-
-            const xhr = new XMLHttpRequest();
-            let method = init.method ?? "GET";
-            xhr.open(method, url, true);
-
-            // process headers
-            for (const headerKey in init.headers) {
-                const headerValue = (init as any).headers[headerKey];
-                xhr.setRequestHeader(headerKey, headerValue);
-            }
-
-            // process body
-            const formData = new FormData();
-            for (const itemKey in init.body as any) {
-                const item = (init.body as any)[itemKey];
-                formData.append(itemKey, item);
-            }
-
-            // resolve/reject
-            xhr.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    console.log("fetch: response: " + JSON.stringify(this.response));
-                    resolve(this.response);
-                } else if (this.readyState == 4 && this.status !== 200) {
-                    console.log("fetch: error response");
-                    console.log(this);
-                    reject(this);
-                }
-            };
-
-            // send it, async
-            xhr.send(formData);
-        });
-        return p;
+        return response as any;
     }
 
     // cookies
