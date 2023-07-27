@@ -1,6 +1,6 @@
 {
   "name": "bayz-gems-api",
-  "version": "0.1.23",
+  "version": "0.1.24",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -13,7 +13,7 @@
     "build": "npm run build:cjs && npm run build:esm && npm run build:umd && npm run build:types",
     "build:cjs": "node tools/cleanup cjs && tsc -p config/tsconfig.cjs.json",
     "build:esm": "node tools/cleanup esm && tsc -p config/tsconfig.esm.json",
-    "build:umd": "node tools/cleanup umd && webpack --config config/webpack.config.js",
+    "build:umd": "node tools/cleanup umd && cp src/gems.ts src/gems.bak && sed -e 's/import/\\/\\/\\ import/g' -e 's/fetchNode/fetch/g' src/gems.bak >src/gems.ts && webpack --config config/webpack.config.js && cp src/gems.bak src/gems.ts && rm src/gems.bak",
     "build:types": "node tools/cleanup types && tsc -p config/tsconfig.types.json",
     "clean": "node tools/cleanup",
     "package": "npm run build && npm pack",
@@ -41,7 +41,10 @@
   "bugs": {
     "url": "https://github.com/WeDriveGrowth/GEMS_Samples/issues"
   },
-  "dependencies": {},
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "request": "^2.88.2"
+  },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",

@@ -1,6 +1,6 @@
 .DS_Store
 components.DS_Store
-
+src/gems.bak
 # Logs
 logs
 *.log
