@@ -330,8 +330,11 @@ export class GEMS {
             // resolve/reject
             xhr.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
+                    console.log("fetch: response: "+JSON.stringify(this.response));
                     resolve(this.response);
                 } else if (this.readyState == 4 && this.status !== 200) {
+                    console.log("fetch: error response");
+                    console.log(this);
                     reject(this);
                 }
             };
