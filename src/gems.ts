@@ -79,6 +79,8 @@ export class GEMS {
     //
 
     static async init(params: GEMSInitParams): Promise<GEMSState> {
+        console.assert(params.appId);
+        console.assert(params.apiKey);
         this.state = { ...params };
         delete this.state.apiKey;
 
@@ -300,7 +302,9 @@ export class GEMS {
 
     // alternate fetch for node 16
     private static fetch(url: string, init: RequestInit): Promise<Response> {
-        console.log("fetch: "+init.method+": "+url+", "+JSON.stringify(init.body));
+        console.log("fetch: "+init.method+": "+url);
+        console.log("    headers: "+JSON.stringify(init.headers));
+        console.log("    body   : "+JSON.stringify(init.body));
         if (typeof window !== "undefined") {
             return fetch(url, init);
         }
