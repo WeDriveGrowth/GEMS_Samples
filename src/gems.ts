@@ -322,6 +322,7 @@ export class GEMS {
 
             const xhr = new XMLHttpRequest();
             let method = init.method ?? "GET";
+            xhr.open(method, url, true);
 
             // process headers
             for (const headerKey in init.headers) {
@@ -349,7 +350,6 @@ export class GEMS {
             };
 
             // send it, async
-            xhr.open(method, url, true);
             xhr.send(formData);
         });
         return p;
