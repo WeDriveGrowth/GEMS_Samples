@@ -96,7 +96,7 @@ export class GEMS {
                 (params.userId ? "/" + params.userId : "");
 
             const response = await this.fetch(url, {
-                method: "POST",
+                method: params.userId?"GET":"POST",
                 headers: {
                     apikey: params.apiKey,
                 },
