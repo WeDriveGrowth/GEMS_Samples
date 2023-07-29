@@ -88,7 +88,7 @@ export class GEMS {
 
         try {
             if (!params.userId && params.useCookie) {
-                this.state.userId = this._getCookie("gems-user-id");
+                params.userId = this._getCookie("gems-user-id");
             }
 
             let url = this._root + "user/" +
