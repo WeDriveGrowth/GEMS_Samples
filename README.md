@@ -1,3 +1,3 @@
-# API wrappers for the Bayz.ai GEMS service
+# API wrappers for the Bayze.com GEMS service
 
 Instructions coming soon!

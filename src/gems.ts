@@ -1,6 +1,6 @@
 //
 // the offical GEMS API wrapper / tag
-// (c) 2023+ WeDriveGrowth
+// (c) 2023+ Bayze.com
 //
 // version: 0.1.0
 //
